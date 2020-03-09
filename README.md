@@ -19,6 +19,7 @@ Main functions :
 ## Usage
 
 ### DotNet run
+![.NET Core](https://github.com/smf33/FlickrFollowerBot/workflows/.NET%20Core/badge.svg)
 
 Download the sources and run donet sdk command in the folder of your Windows, Linux or Mac.
 
@@ -63,6 +64,7 @@ dotnet run SeleniumRemoteServer=http://seleniumhubhostname:4444/wd/hub BotUserEm
 ```
 
 ### Docker run
+![Docker](https://github.com/smf33/FlickrFollowerBot/workflows/Docker/badge.svg)
 
 - Build and Run default BotTasks with Docker with a remote Selenium Hub (here another docker) :
 Exemple with Z:\FlickrFollowerBot as the source path, on a Windows system
@@ -73,6 +75,7 @@ docker run --link seleniumContainer:seleniumhost flickrfollowerbot BotUserEmail=
 ```
 
 ### Docker Compose run
+![Docker Compose](https://github.com/smf33/FlickrFollowerBot/workflows/Docker%20Compose/badge.svg)
 
 - Build and Run default BotTasks with Docker and an standalone Selenium
 
