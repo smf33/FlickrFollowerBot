@@ -26,4 +26,4 @@ jobs:
       run: docker login -u $GITHUB_ACTOR -p ${{ secrets.GITHUB_TOKEN }} docker.pkg.github.com
     
     - name: Push the Docker image
-      run: docker push docker.pkg.github.com/smf33/flickrfollowerbo/buster-slim:latest
+      run: docker push docker.pkg.github.com/smf33/flickrfollowerbot/buster-slim:latest
