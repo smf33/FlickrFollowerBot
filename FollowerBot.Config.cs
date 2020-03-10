@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -62,7 +62,6 @@ namespace FlickrFollowerBot
 			internal string CssPhotos;
 			internal string CssPhotosFaved;
 			internal string CssRecentContactPost;
-			internal string CssSearch;
 			internal string CssWaiterBalls;
 			internal string SeleniumRemoteServer;
 			internal int SeleniumWindowMaxH;
@@ -81,6 +80,7 @@ namespace FlickrFollowerBot
 			internal string UrlLogin;
 			internal string UrlRecentContactPost;
 			internal string UrlRoot;
+			internal string UrlSearch;
 		}
 
 		private Configuration Config;
@@ -116,6 +116,7 @@ namespace FlickrFollowerBot
 					UrlContactsMutual = config["UrlContactsMutual"],
 					UrlContactsBlocked = config["UrlContactsBlocked"],
 					UrlContactsNotFriendAndFamily = config["UrlContactsNotFriendAndFamily"],
+					UrlSearch = config["UrlSearch"],
 					CssRecentContactPost = config["CssRecentContactPost"],
 					CssError500 = config["CssError500"],
 					CssPhotosError404 = config["CssPhotosError404"],
@@ -133,8 +134,7 @@ namespace FlickrFollowerBot
 					CssPhotosFaved = config["CssPhotosFaved"],
 					CssPhotos = config["CssPhotos"],
 					CssPhotoFave = config["CssPhotoFave"],
-					CssPhotoFaved = config["CssPhotoFaved"],
-					CssSearch = config["CssSearch"]
+					CssPhotoFaved = config["CssPhotoFaved"]
 				};
 
 				try
@@ -144,8 +144,8 @@ namespace FlickrFollowerBot
 					Config.BotCacheMyContacts = int.Parse(config["BotCacheMyContacts"], CultureInfo.InvariantCulture) != 0;
 					Config.BotSaveAfterEachAction = int.Parse(config["BotSaveAfterEachAction"], CultureInfo.InvariantCulture) != 0;
 					Config.BotSaveOnLoop = int.Parse(config["BotSaveOnLoop"], CultureInfo.InvariantCulture) != 0;
-					Config.BotSaveOnEnd = !Config.BotSaveOnLoop && int.Parse(config["BotSaveOnEnd"], CultureInfo.InvariantCulture) != 0; // redondant else
-																																		 // float																										 // float
+					Config.BotSaveOnEnd = int.Parse(config["BotSaveOnEnd"], CultureInfo.InvariantCulture) != 0;
+					// float
 					Config.BotSeleniumTimeoutSec = float.Parse(config["BotSeleniumTimeoutSec"], CultureInfo.InvariantCulture);
 					// int
 					Config.BotSearchScrools = int.Parse(config["BotSearchScrools"], CultureInfo.InvariantCulture);

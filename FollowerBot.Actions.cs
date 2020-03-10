@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.Extensions.Logging;
 
 namespace FlickrFollowerBot
@@ -263,8 +264,8 @@ namespace FlickrFollowerBot
 			if (doPost)
 			{
 				string[] list = Selenium.GetAttributes(Config.CssPhotos, "href", false)
-				.Except(Data.PhotosToFav)
-				.ToArray();// solve linq for multiple use
+					.Except(Data.PhotosToFav)
+					.ToArray();// solve linq for multiple use
 
 				int c = Data.PhotosToFav.Count;
 				foreach (string needToFav in list
@@ -284,13 +285,10 @@ namespace FlickrFollowerBot
 			{
 				Log.LogDebug("Searching {0}", keyword);
 
-				MoveTo(Config.UrlRoot);
-				Selenium.InputWrite(Config.CssSearch, keyword);
-				Selenium.EnterKey(Config.CssSearch);
+				MoveTo(Config.UrlSearch + HttpUtility.UrlEncode(keyword));
 				WaitHumanizer();
 
 				SchroolDownLoop(Config.BotSearchScrools);
-
 
 				if (doContact)
 				{
@@ -312,8 +310,8 @@ namespace FlickrFollowerBot
 				if (doPhoto)
 				{
 					string[] list = Selenium.GetAttributes(Config.CssPhotos, "href", false)
-					.Except(Data.PhotosToFav)
-					.ToArray();// solve linq for multiple use
+						.Except(Data.PhotosToFav)
+						.ToArray();// solve linq for multiple use
 					foreach (string needToFav in list
 						.Except(Data.PhotosToFav))
 					{
