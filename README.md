@@ -30,17 +30,17 @@ dotnet run
 
 - Follow back users whose follow you in a permanent loop :
 ```
-dotnet run BotTasks=DetectFollowBack,DoFollow,Wait,Loop BotUserEmail=you@dom.com BotUserPassword=Passw0rd
+dotnet run BotTasks=DetectContactsFollowBack,DoContactsFollow,Wait,Loop BotUserEmail=you@dom.com BotUserPassword=Passw0rd
 ```
 
 - On a daily base, find users in today Explore, fav theirs pictures then follow them :
 ```
-dotnet run BotTasks=DetectExplored,DoFav,DoFollow BotUserEmail=you@dom.com BotUserPassword=Passw0rd
+dotnet run BotTasks=DetectExplored,DoPhotosFav,DoContactsFollow BotUserEmail=you@dom.com BotUserPassword=Passw0rd
 ```
 
 - On a daily base, unfollow users whose doesn't follow you :
 ```
-dotnet run BotTasks=DetectUnfollowBack,DoUnfollow BotUserEmail=you@dom.com BotUserPassword=Passw0rd
+dotnet run BotTasks=DetectContactsUnfollowBack,DoContactsUnfollow BotUserEmail=you@dom.com BotUserPassword=Passw0rd
 ```
 
 - Follow and fav photo of a specific user :
@@ -79,7 +79,7 @@ docker run --link seleniumContainer:seleniumhost flickrfollowerbot BotUserEmail=
 
 - Build and Run default BotTasks with Docker and an standalone Selenium
 
-Exemple with BotUserEmail&BotUserPassword provided in the FlickrFollowerBot.json or in the "environment:" of the docker-compose.yml
+Exemple with BotUserEmail&BotUserPassword provided in the FlickrFollowerBot.json or in the host "environment"
 ```
 docker-compose up
 ```
