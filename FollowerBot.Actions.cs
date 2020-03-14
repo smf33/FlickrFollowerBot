@@ -501,7 +501,7 @@ namespace FlickrFollowerBot
 						break; // stop this action
 					}
 				}
-				Log.LogDebug("$ContactsToFav -{0}", c - Data.ContactsToFollow.Count);
+				Log.LogDebug("$ContactsToFav -{0}", c - Data.ContactsToFav.Count);
 			}
 		}
 
@@ -583,7 +583,7 @@ namespace FlickrFollowerBot
 			{
 				Data.PhotosToFav.Enqueue(needToFav);
 			}
-			Log.LogDebug("$PhotosToFav +{0}", Data.ContactsToUnfollow.Count - c);
+			Log.LogDebug("$PhotosToFav +{0}", Data.PhotosToFav.Count - c);
 		}
 
 		private void DoPhotosFav()
