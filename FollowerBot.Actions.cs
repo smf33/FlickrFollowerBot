@@ -252,14 +252,14 @@ namespace FlickrFollowerBot
 				{
 					Data.ContactsToFollow.Enqueue(needToFollow);
 				}
-				Log.LogDebug("ContactsToFollow +{0}", Data.ContactsToFollow.Count - c);
+				Log.LogDebug("$ContactsToFollow +{0}", Data.ContactsToFollow.Count - c);
 
 				c = Data.ContactsToFav.Count;
 				foreach (string needToFollow in list.Except(Data.ContactsToFav))
 				{
 					Data.ContactsToFav.Enqueue(needToFollow);
 				}
-				Log.LogDebug("ContactsToFav +{0}", Data.ContactsToFav.Count - c);
+				Log.LogDebug("$ContactsToFav +{0}", Data.ContactsToFav.Count - c);
 			}
 			if (doPost)
 			{
@@ -273,7 +273,7 @@ namespace FlickrFollowerBot
 				{
 					Data.PhotosToFav.Enqueue(needToFav);
 				}
-				Log.LogDebug("PhotosToFav +{0}", Data.PhotosToFav.Count - c);
+				Log.LogDebug("$PhotosToFav +{0}", Data.PhotosToFav.Count - c);
 			}
 
 		}
@@ -298,25 +298,33 @@ namespace FlickrFollowerBot
 						.Except(Data.MyContactsBanned)
 						.ToArray();// solve linq for multiple use
 
+					int c = Data.ContactsToFollow.Count;
 					foreach (string needToFollow in list.Except(Data.ContactsToFollow))
 					{
 						Data.ContactsToFollow.Enqueue(needToFollow);
 					}
+					Log.LogDebug("$ContactsToFollow +{0}", Data.ContactsToFollow.Count - c);
+					
+					c = Data.ContactsToFav.Count;
 					foreach (string needToFollow in list.Except(Data.ContactsToFav))
 					{
 						Data.ContactsToFav.Enqueue(needToFollow);
 					}
+					Log.LogDebug("$ContactsToFav +{0}", Data.ContactsToFav.Count - c);
 				}
 				if (doPhoto)
 				{
 					string[] list = Selenium.GetAttributes(Config.CssPhotos, "href", false)
 						.Except(Data.PhotosToFav)
 						.ToArray();// solve linq for multiple use
+					
+					int c = Data.PhotosToFav.Count;
 					foreach (string needToFav in list
 						.Except(Data.PhotosToFav))
 					{
 						Data.PhotosToFav.Enqueue(needToFav);
 					}
+					Log.LogDebug("$PhotosToFav +{0}", Data.PhotosToFav.Count - c);
 				}
 
 			}
@@ -332,7 +340,7 @@ namespace FlickrFollowerBot
 			{
 				Data.ContactsToFollow.Enqueue(needToFollow);
 			}
-			Log.LogDebug("ContactsToFollow +{0}", Data.ContactsToFollow.Count - c);
+			Log.LogDebug("$ContactsToFollow +{0}", Data.ContactsToFollow.Count - c);
 
 			c = Data.ContactsToFav.Count;
 			foreach (string needToFollow in list
@@ -340,12 +348,13 @@ namespace FlickrFollowerBot
 			{
 				Data.ContactsToFav.Enqueue(needToFollow);
 			}
-			Log.LogDebug("ContactsToFav +{0}", Data.ContactsToFav.Count - c);
+			Log.LogDebug("$ContactsToFav +{0}", Data.ContactsToFav.Count - c);
 		}
 
 		private void DoContactsFollow()
 		{
 			int todo = Rand.Next(Config.BotFollowTaskBatchMinLimit, Config.BotFollowTaskBatchMaxLimit);
+			int c = Data.ContactsToFollow.Count;
 			while (Data.ContactsToFollow.TryDequeue(out string uri) && todo > 0)
 			{
 				if (!MoveTo(uri))
@@ -388,10 +397,10 @@ namespace FlickrFollowerBot
 				catch (Exception ex)
 				{
 					Log.LogWarning(default, ex, "ACTION STOPED : {0}", ex.GetBaseException().Message);
-					Data.ContactsToFollow.Enqueue(uri); // try later ?
 					break; // stop this action
 				}
 			}
+			Log.LogDebug("$ContactsToFollow -{0}", c - Data.ContactsToFollow.Count);
 		}
 
 		private void PhotoFav(string url, out bool wasFaved, out bool inError)
@@ -451,6 +460,7 @@ namespace FlickrFollowerBot
 			if (Config.BotFavPictsPerContactMin > 0)
 			{
 				int contactsTodo = Rand.Next(Config.BotContactsFavTaskBatchMinLimit, Config.BotContactsFavTaskBatchMaxLimit);
+				int c = Data.ContactsToFav.Count;
 				while (Data.ContactsToFav.TryDequeue(out string uri) && 0 < contactsTodo)
 				{
 					if (!MoveTo(uri))
@@ -488,10 +498,10 @@ namespace FlickrFollowerBot
 					catch (Exception ex)
 					{
 						Log.LogWarning(default, ex, "ACTION STOPED : {0}", ex.GetBaseException().Message);
-						Data.ContactsToFav.Enqueue(uri); // try later ?
 						break; // stop this action
 					}
 				}
+				Log.LogDebug("$ContactsToFav -{0}", c - Data.ContactsToFav.Count);
 			}
 		}
 
@@ -526,12 +536,13 @@ namespace FlickrFollowerBot
 					Data.ContactsToUnfollow.Enqueue(needToUnfollow);
 				}
 			}
-			Log.LogDebug("ContactsToUnfollow ={0}", Data.ContactsToUnfollow.Count);
+			Log.LogDebug("$ContactsToUnfollow ={0}", Data.ContactsToUnfollow.Count);
 		}
 
 		private void DoContactsUnfollow()
 		{
 			int todo = Rand.Next(Config.BotUnfollowTaskBatchMinLimit, Config.BotUnfollowTaskBatchMaxLimit);
+			int c = Data.ContactsToUnfollow.Count;
 			while (Data.ContactsToUnfollow.TryDequeue(out string uri) && todo > 0)
 			{
 				MoveTo(uri);
@@ -551,10 +562,10 @@ namespace FlickrFollowerBot
 				catch (Exception ex)
 				{
 					Log.LogWarning(default, ex, "ACTION STOPED : {0}", ex.GetBaseException().Message);
-					Data.ContactsToFav.Enqueue(uri); // try later ?
 					break; // stop this action
 				}
 			}
+			Log.LogDebug("$ContactsToUnfollow -{0}", c - Data.ContactsToUnfollow.Count);
 		}
 
 		private void DetectRecentContactPhotos()
@@ -566,16 +577,19 @@ namespace FlickrFollowerBot
 			string[] list = Selenium.GetAttributes(Config.CssRecentContactPost, "href")
 				.ToArray();
 
+			int c = Data.PhotosToFav.Count;
 			foreach (string needToFav in list
 				.Except(Data.PhotosToFav))
 			{
 				Data.PhotosToFav.Enqueue(needToFav);
 			}
+			Log.LogDebug("$PhotosToFav +{0}", Data.PhotosToFav.Count - c);
 		}
 
 		private void DoPhotosFav()
 		{
 			int todo = Rand.Next(Config.BotPhotoFavTaskBatchMinLimit, Config.BotPhotoFavTaskBatchMaxLimit);
+			int c = Data.PhotosToFav.Count;
 			while (Data.PhotosToFav.TryDequeue(out string uri) && todo > 0)
 			{
 				try
@@ -596,6 +610,7 @@ namespace FlickrFollowerBot
 					break; // stop this action
 				}
 			}
+			Log.LogDebug("$PhotosToFav -{0}", c - Data.PhotosToFav.Count);
 		}
 
 	}
