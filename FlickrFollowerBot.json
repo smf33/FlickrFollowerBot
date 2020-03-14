@@ -31,7 +31,6 @@
 	"BotUserEmail": null,
 	"BotUserPassword": null,
 	"BotUserSaveFolder": null,
-	"BotVerbose": 0,
 	"BotWaitTaskMaxWaitSec": 7200,
 	"BotWaitTaskMinWaitSec": 3600,
 	"CssContactFollow": "button.follow:not(.is-following)",
