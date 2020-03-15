@@ -13,7 +13,15 @@ namespace FlickrFollowerBot
 			{
 				using (FollowerBot bot = new FollowerBot(args, logger))
 				{
-					bot.Run();
+					try
+					{
+						bot.Run();
+					}
+					catch
+					{
+						bot.DebugDump();
+						throw;
+					}
 				}
 			}
 			catch (Exception ex)
