@@ -184,7 +184,7 @@ namespace FlickrFollowerBot
 
 					if (!string.IsNullOrWhiteSpace(config["SeleniumBrowserArguments"]))
 					{
-						Config.SeleniumBrowserArguments = config["SeleniumBrowserArguments"].Split(';', StringSplitOptions.RemoveEmptyEntries);
+						Config.SeleniumBrowserArguments = config["SeleniumBrowserArguments"].Split('|', StringSplitOptions.RemoveEmptyEntries);
 					}
 					else
 					{
