@@ -106,35 +106,35 @@ namespace FlickrFollowerBot
 						if (tmp.MyContacts != null)
 						{
 							Data.MyContacts = tmp.MyContacts;
-							Log.LogDebug("MyContacts : {0}", Data.MyContacts.Count);
+							Log.LogDebug("$MyContacts #{0}", Data.MyContacts.Count);
 						}
 						if (tmp.MyContactsBanned != null)
 						{
 							Data.MyContactsBanned = tmp.MyContactsBanned;
-							Log.LogDebug("MyContactsBanned : {0}", Data.MyContactsBanned.Count);
+							Log.LogDebug("$MyContactsBanned #{0}", Data.MyContactsBanned.Count);
 						}
 					}
 					if (tmp.ContactsToFollow != null)
 					{
 						Data.ContactsToFollow = new Queue<string>(tmp.ContactsToFollow
 							.Except(Data.MyContacts).Except(Data.MyContactsBanned)); // some contacts may have been already added manualy
-						Log.LogDebug("ContactsToFollow :  {0}", Data.ContactsToFollow.Count);
+						Log.LogDebug("$ContactsToFollow #{0}", Data.ContactsToFollow.Count);
 					}
 					if (tmp.ContactsToFav != null)
 					{
 						Data.ContactsToFav = new Queue<string>(tmp.ContactsToFav
 							.Except(Data.MyContacts).Except(Data.MyContactsBanned)); // some contacts may have been already added manualy
-						Log.LogDebug("ContactsToFav :  {0}", Data.ContactsToFav.Count);
+						Log.LogDebug("$ContactsToFav #{0}", Data.ContactsToFav.Count);
 					}
 					if (tmp.ContactsToUnfollow != null)
 					{
 						Data.ContactsToUnfollow = tmp.ContactsToUnfollow;
-						Log.LogDebug("ContactsToUnfollow :  {0}", Data.ContactsToUnfollow.Count);
+						Log.LogDebug("$ContactsToUnfollow #{0}", Data.ContactsToUnfollow.Count);
 					}
 					if (tmp.PhotosToFav != null)
 					{
 						Data.PhotosToFav = tmp.PhotosToFav;
-						Log.LogDebug("PhotosToFav :  {0}", Data.PhotosToFav.Count);
+						Log.LogDebug("$PhotosToFav #{0}", Data.PhotosToFav.Count);
 					}
 					if (tmp.Cookies != null)
 					{

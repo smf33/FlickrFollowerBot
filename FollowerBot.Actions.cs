@@ -138,8 +138,10 @@ namespace FlickrFollowerBot
 				|| DateTime.UtcNow > Data.MyContactsUpdate.Value.AddHours(Config.BotCacheTimeLimitHours))
 			{
 				Data.MyContacts = GetContactList(Config.UrlContacts).ToHashSet();
+				Log.LogDebug("$MyContacts ={0}", Data.MyContacts.Count);
 
 				Data.MyContactsBanned = GetContactList(Config.UrlContactsBlocked).ToHashSet();
+				Log.LogDebug("$MyContactsBanned ={0}", Data.MyContactsBanned.Count);
 
 				Data.MyContactsUpdate = DateTime.UtcNow;
 			}
