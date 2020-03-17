@@ -156,15 +156,8 @@ namespace FlickrFollowerBot
 				WebDriver.Manage().Cookies.DeleteAllCookies();
 				foreach (JObject cookie in value.OfType<JObject>())
 				{
-					WebDriver.Manage().Cookies.AddCookie(
-						new Cookie(
-							cookie["name"].ToString(),
-							cookie["value"].ToString(),
-							cookie["domain"].ToString(),
-							cookie["path"].ToString(),
-							cookie["expiry"] != null ? Epoch.AddMilliseconds(cookie["expiry"].Value<long>()) : null as DateTime?
-						)
-					);
+					Cookie c = Cookie.FromDictionary(cookie.ToObject<Dictionary<string, object>>());
+					WebDriver.Manage().Cookies.AddCookie(c);
 				}
 			}
 		}
