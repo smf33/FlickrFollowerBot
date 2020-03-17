@@ -36,6 +36,8 @@ namespace FlickrFollowerBot
 			public Queue<string> ContactsToUnfollow = new Queue<string>();
 
 			public IEnumerable<object> Cookies = new List<object>();
+			public IDictionary<string, string> SessionStorage = new Dictionary<string, string>();
+			public IDictionary<string, string> LocalStorage = new Dictionary<string, string>();
 
 			/// <summary>
 			/// Last refresh date
@@ -141,6 +143,16 @@ namespace FlickrFollowerBot
 						Data.Cookies = tmp.Cookies;
 						Log.LogDebug("Cookies : {0}", Data.Cookies.Count());
 					}
+					if (tmp.SessionStorage != null)
+					{
+						Data.SessionStorage = tmp.SessionStorage;
+						Log.LogDebug("SessionStorage : {0}", Data.SessionStorage.Count);
+					}
+					if (tmp.LocalStorage != null)
+					{
+						Data.LocalStorage = tmp.LocalStorage;
+						Log.LogDebug("LocalStorage : {0}", Data.LocalStorage.Count);
+					}
 				}
 				else
 				{
@@ -161,7 +173,9 @@ namespace FlickrFollowerBot
 					ContactsToFav = Data.ContactsToFav,
 					ContactsToUnfollow = Data.ContactsToUnfollow,
 					PhotosToFav = Data.PhotosToFav,
-					Cookies = GetCookies()
+					Cookies = Selenium.Cookies,
+					SessionStorage = Selenium.SessionStorage,
+					LocalStorage = Selenium.LocalStorage
 				};
 				if (Config.BotCacheMyContacts)
 				{

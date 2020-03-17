@@ -200,6 +200,9 @@ namespace FlickrFollowerBot
 				}
 
 				Selenium.Cookies = Data.Cookies; // need to have loaded the page 1st
+				Selenium.SessionStorage = Data.SessionStorage; // need to have loaded the page 1st
+				Selenium.LocalStorage = Data.LocalStorage; // need to have loaded the page 1st
+
 				if (!MoveTo(Config.UrlRoot))
 				{
 					throw new NotSupportedException("FLICKR RETURN ERROR 500 ON " + Config.UrlRoot);
@@ -228,11 +231,6 @@ namespace FlickrFollowerBot
 			{
 				return false;
 			}
-		}
-
-		private IEnumerable<object> GetCookies()
-		{
-			return Selenium.Cookies;
 		}
 
 		private void DetectExplored(bool doContact = true, bool doPost = true)
@@ -306,7 +304,7 @@ namespace FlickrFollowerBot
 						Data.ContactsToFollow.Enqueue(needToFollow);
 					}
 					Log.LogDebug("$ContactsToFollow +{0}", Data.ContactsToFollow.Count - c);
-					
+
 					c = Data.ContactsToFav.Count;
 					foreach (string needToFollow in list.Except(Data.ContactsToFav))
 					{
@@ -319,7 +317,7 @@ namespace FlickrFollowerBot
 					string[] list = Selenium.GetAttributes(Config.CssPhotos, "href", false)
 						.Except(Data.PhotosToFav)
 						.ToArray();// solve linq for multiple use
-					
+
 					int c = Data.PhotosToFav.Count;
 					foreach (string needToFav in list
 						.Except(Data.PhotosToFav))

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -77,16 +78,10 @@ namespace FlickrFollowerBot
 			get => WebDriver.Url;
 			set => WebDriver.Url = value;
 		}
-		
-		public string Title
-		{
-			get => WebDriver.Title;
-		}
-		
-		internal string CurrentPageSource
-		{
-			get => JsDriver.ExecuteScript("return document.documentElement.innerHTML").ToString();
-		}
+
+		public string Title => WebDriver.Title;
+
+		internal string CurrentPageSource => JsDriver.ExecuteScript("return document.documentElement.innerHTML").ToString();
 
 		public IEnumerable<IWebElement> GetElements(string cssSelector, bool displayedOnly = true, bool noImplicitWait = false)
 		{
@@ -158,6 +153,7 @@ namespace FlickrFollowerBot
 			get => WebDriver.Manage().Cookies.AllCookies;
 			set
 			{
+				WebDriver.Manage().Cookies.DeleteAllCookies();
 				foreach (JObject cookie in value.OfType<JObject>())
 				{
 					WebDriver.Manage().Cookies.AddCookie(
@@ -170,6 +166,46 @@ namespace FlickrFollowerBot
 						)
 					);
 				}
+			}
+		}
+
+		internal IDictionary<string, string> LocalStorage
+		{
+			get
+			{
+				IDictionary<string, object> ret = JsDriver.ExecuteScript("return localStorage;") as IDictionary<string, object>;
+				return new Dictionary<string, string>(ret
+					.Where(x => x.Value is string)
+					.Select(x => new KeyValuePair<string, string>(x.Key, x.Value as string)));
+			}
+			set
+			{
+				StringBuilder s = new StringBuilder("localStorage.clear();");
+				foreach (KeyValuePair<string, string> kv in value)
+				{
+					s.AppendFormat("localStorage.setItem('{0}', '{1}');", kv.Key, kv.Value);
+				}
+				JsDriver.ExecuteScript(s.ToString());
+			}
+		}
+
+		internal IDictionary<string, string> SessionStorage
+		{
+			get
+			{
+				IDictionary<string, object> ret = JsDriver.ExecuteScript("return sessionStorage;") as IDictionary<string, object>;
+				return new Dictionary<string, string>(ret
+					.Where(x => x.Value is string)
+					.Select(x => new KeyValuePair<string, string>(x.Key, x.Value as string)));
+			}
+			set
+			{
+				StringBuilder s = new StringBuilder("sessionStorage.clear();");
+				foreach (KeyValuePair<string, string> kv in value)
+				{
+					s.AppendFormat("sessionStorage.setItem('{0}', '{1}');", kv.Key, kv.Value);
+				}
+				JsDriver.ExecuteScript(s.ToString());
 			}
 		}
 

@@ -165,7 +165,7 @@ namespace FlickrFollowerBot
 			}
 			Log.LogInformation("## ENDED OK");
 		}
-		
+
 		internal void DebugDump()
 		{
 			Log.LogDebug("## DUMPING...");
@@ -187,7 +187,7 @@ namespace FlickrFollowerBot
 			{
 				Log.LogDebug("# Unknow Title : {0}", ex.GetBaseException().Message);
 			}
-			
+
 			try
 			{
 				Log.LogDebug("# Current page source :\r\n{0}", Selenium.CurrentPageSource);
