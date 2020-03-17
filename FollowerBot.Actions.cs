@@ -296,7 +296,7 @@ namespace FlickrFollowerBot
 						.Distinct()
 						.Except(Data.MyContacts)
 						.Except(Data.MyContactsBanned)
-						.ToArray();// solve linq for multiple use
+						.ToArray();// solve for multiple use
 
 					int c = Data.ContactsToFollow.Count;
 					foreach (string needToFollow in list.Except(Data.ContactsToFollow))
@@ -332,7 +332,9 @@ namespace FlickrFollowerBot
 
 		private void DetectContactsFollowBack()
 		{
-			IEnumerable<string> list = GetContactList(Config.UrlContactsOneWay);
+			IEnumerable<string> list = GetContactList(Config.UrlContactsOneWay)
+				.Except(Data.MyContactsBanned)
+				.ToList(); // Solve
 
 			int c = Data.ContactsToFollow.Count;
 			foreach (string needToFollow in list
@@ -551,13 +553,16 @@ namespace FlickrFollowerBot
 					if (Selenium.GetElements(Config.CssContactFollowed).Any()) // manage the already unfollowed like this
 					{
 						Selenium.Click(Config.CssContactFollowed);
-						Data.MyContacts.Remove(uri);
-						MyContactsInTryout.Remove(uri);
+						WaitHumanizer();// the url relad may break a waiting ball
+
 						Selenium.Click(Config.CssContactUnfollow);
 						WaitHumanizer();// the url relad may break a waiting ball
+						
+						Data.MyContacts.Remove(uri);
+						MyContactsInTryout.Remove(uri);
+						Data.MyContactsBanned.Add(uri);
 						todo--;
 					}
-
 				}
 				catch (Exception ex)
 				{
