@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -168,35 +168,32 @@ namespace FlickrFollowerBot
 
 		internal void DebugDump()
 		{
-			Log.LogDebug("## DUMPING...");
+			bool hadContext = false;
+			try
+			{
+				Log.LogDebug("# Dump last Url : {0}", Selenium.Url);
+				hadContext = true;
+			}
+			catch {}
 
 			try
 			{
-				Log.LogDebug("# Url : {0}", Selenium.Url);
+				Log.LogDebug("# Dump last Title : {0}", Selenium.Title);
+				hadContext = true;
 			}
-			catch (Exception ex)
-			{
-				Log.LogDebug("# Unknow Url : {0}", ex.GetBaseException().Message);
-			}
+			catch {}
 
 			try
 			{
-				Log.LogDebug("# Title : {0}", Selenium.Title);
+				Log.LogDebug("# Dump last page source :\r\n{0}", Selenium.CurrentPageSource);
+				hadContext = true;
 			}
-			catch (Exception ex)
-			{
-				Log.LogDebug("# Unknow Title : {0}", ex.GetBaseException().Message);
-			}
+			catch {}
 
-			try
+			if(!hadContext)
 			{
-				Log.LogDebug("# Current page source :\r\n{0}", Selenium.CurrentPageSource);
+				Log.LogDebug("# Couldn't dump last context");
 			}
-			catch (Exception ex)
-			{
-				Log.LogDebug("# Unknow page source : {0}", ex.GetBaseException().Message);
-			}
-
 		}
 
 		#region IDisposable Support
