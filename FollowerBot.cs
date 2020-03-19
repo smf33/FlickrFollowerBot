@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
@@ -11,22 +12,22 @@ namespace FlickrFollowerBot
 	{
 		private const string DetectContactsFollowBackStr = "DETECTCONTACTSFOLLOWBACK";
 		private const string DetectContactsUnfollowBackStr = "DETECTCONTACTSUNFOLLOWBACK";
-		private const string DetectExploredStr = "DETECTEXPLORED";
 		private const string DetectExploredContactsOnlyStr = "DETECTEXPLORED_CONTACTSONLY";
 		private const string DetectExploredPhotosOnlyStr = "DETECTEXPLORED_PHOTOSSONLY";
-		private const string SearchKeywordsStr = "SEARCHKEYWORDS";
-		private const string SearchKeywordsContactsOnlyStr = "SEARCHKEYWORDS_CONTACTSONLY";
-		private const string SearchKeywordsPhotosOnlyStr = "SEARCHKEYWORDS_PHOTOSSONLY";
+		private const string DetectExploredStr = "DETECTEXPLORED";
 		private const string DetectRecentContactPhotosStr = "DETECTRECENTCONTACTPHOTOS";
 		private const string DoContactsFavStr = "DOCONTACTSFAV";
 		private const string DoContactsFollowStr = "DOCONTACTSFOLLOW";
 		private const string DoContactsUnfollowStr = "DOCONTACTSUNFOLLOW";
 		private const string DoPhotosFavStr = "DOPHOTOSFAV";
-		private const string PauseStr = "PAUSE";
-		private const string WaitStr = "WAIT";
-		private const string LoopStr = "LOOP";
 		private const string LoopStartStr = "LOOPSTART";
+		private const string LoopStr = "LOOP";
+		private const string PauseStr = "PAUSE";
 		private const string SaveStr = "SAVE";
+		private const string SearchKeywordsContactsOnlyStr = "SEARCHKEYWORDS_CONTACTSONLY";
+		private const string SearchKeywordsPhotosOnlyStr = "SEARCHKEYWORDS_PHOTOSSONLY";
+		private const string SearchKeywordsStr = "SEARCHKEYWORDS";
+		private const string WaitStr = "WAIT";
 
 		private static readonly string ExecPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
@@ -168,31 +169,24 @@ namespace FlickrFollowerBot
 
 		internal void DebugDump()
 		{
-			bool hadContext = false;
+			StringBuilder dump = new StringBuilder();
 			try
 			{
-				Log.LogDebug("# Dump last Url : {0}", Selenium.Url);
-				hadContext = true;
+				dump.AppendFormat("# Dump last page : {0} @ {1}\r\n", Selenium.Title, Selenium.Url);
+				dump.Append(Selenium.CurrentPageSource); // this one may crash more probably
 			}
-			catch {}
-
-			try
+			catch
 			{
-				Log.LogDebug("# Dump last Title : {0}", Selenium.Title);
-				hadContext = true;
+				// Not usefull because already in exception
 			}
-			catch {}
 
-			try
+			if (dump.Length > 0)
 			{
-				Log.LogDebug("# Dump last page source :\r\n{0}", Selenium.CurrentPageSource);
-				hadContext = true;
+				Log.LogDebug(dump.ToString());
 			}
-			catch {}
-
-			if(!hadContext)
+			else
 			{
-				Log.LogDebug("# Couldn't dump last context");
+				Log.LogDebug("# Couldn't dump last page context");
 			}
 		}
 
