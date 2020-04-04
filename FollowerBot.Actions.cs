@@ -109,17 +109,19 @@ namespace FlickrFollowerBot
 		{
 			if (!string.IsNullOrWhiteSpace(configValue))
 			{
+				int added = 0;
 				foreach (string s in configValue.Split(',', StringSplitOptions.RemoveEmptyEntries))
 				{
 					if (s.StartsWith(Config.UrlRoot, StringComparison.OrdinalIgnoreCase))
 					{
 						if (queue.Contains(s))
 						{
+							added++;
 							queue.Enqueue(s);
 						}
 						else
 						{
-							Log.LogDebug("{0} useless for {1}", configName, s);
+							Log.LogDebug("{0} already in ${1}", s, configName);
 						}
 					}
 					else
@@ -127,6 +129,7 @@ namespace FlickrFollowerBot
 						Log.LogWarning("Check {0} Url format for {1}", configName, s);
 					}
 				}
+				Log.LogDebug("${0} +{1} AddForced", configName, added);
 			}
 		}
 
@@ -146,8 +149,9 @@ namespace FlickrFollowerBot
 				Data.MyContactsUpdate = DateTime.UtcNow;
 			}
 
-			AddForced("AddPhotosToFav", Config.AddContactsToFollow, Data.PhotosToFav);
 			AddForced("AddContactsToFav", Config.AddContactsToFav, Data.ContactsToFav);
+			AddForced("AddPhotosToFav", Config.AddContactsToFollow, Data.PhotosToFav);
+			AddForced("AddContactsToUnfollow", Config.AddContactsToUnfollow, Data.ContactsToUnfollow);
 			AddForced("AddPhotosToFav", Config.AddPhotosToFav, Data.PhotosToFav);
 		}
 

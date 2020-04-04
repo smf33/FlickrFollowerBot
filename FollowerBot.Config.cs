@@ -15,6 +15,7 @@ namespace FlickrFollowerBot
 			internal string AddPhotosToFav;
 			internal string AddContactsToFav;
 			internal string AddContactsToFollow;
+			internal string AddContactsToUnfollow;
 			internal string BotUserSaveFolder;
 			internal bool BotCacheMyContacts;
 			internal bool BotSaveAfterEachAction;
@@ -105,6 +106,7 @@ namespace FlickrFollowerBot
 					AddPhotosToFav = config["AddPhotosToFav"],
 					AddContactsToFav = config["AddContactsToFav"],
 					AddContactsToFollow = config["AddContactsToFollow"],
+					AddContactsToUnfollow = config["AddContactsToUnfollow"],
 					BotUserSaveFolder = config["BotUserSaveFolder"],
 					SeleniumRemoteServer = config["SeleniumRemoteServer"],
 					UrlRoot = config["UrlRoot"],

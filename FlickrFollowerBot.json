@@ -1,6 +1,7 @@
 {
 	"AddContactsToFav": null,
 	"AddContactsToFollow": null,
+	"AddContactsToUnfollow": null,
 	"AddPhotosToFav": null,
 	"BotCacheMyContacts": 1,
 	"BotCacheTimeLimitHours": 48,
