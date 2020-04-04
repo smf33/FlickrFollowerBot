@@ -150,7 +150,7 @@ namespace FlickrFollowerBot
 			}
 
 			AddForced("AddContactsToFav", Config.AddContactsToFav, Data.ContactsToFav);
-			AddForced("AddPhotosToFav", Config.AddContactsToFollow, Data.PhotosToFav);
+			AddForced("AddContactsToFollow", Config.AddContactsToFollow, Data.ContactsToFollow);
 			AddForced("AddContactsToUnfollow", Config.AddContactsToUnfollow, Data.ContactsToUnfollow);
 			AddForced("AddPhotosToFav", Config.AddPhotosToFav, Data.PhotosToFav);
 		}
