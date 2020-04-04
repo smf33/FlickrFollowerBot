@@ -98,9 +98,11 @@ BotUserPassword may be set to null in debug mode (the user will be able to inser
 | SeleniumRemoteServer | Url of the Selenium Hub web service |
 | BotTasks | Tasks to do, separatedd by a comma |
 | BotUserSaveFolder | Where user informations (like cookie) are stored |
-| AddPhotosToFav | Next DoPhotosFav will fav this picture, multiple separated with a comma, format : https://www.flickr.com/photos/{USERID}/{PHOTOID}  |
-| AddContactsToFollow | Next DoContactsFollow will follow this user, multiple separated with a comma, format : https://www.flickr.com/photos/{USERID}/  |
-| AddContactsToFav | Next DoContactsFav will fav pictures of this user, multiple separated with a comma, format : https://www.flickr.com/photos/{USERID}/ |
+| AddPhotosToFav | Add theses direct photos link in the queue of DoPhotosFav task, multiple separated with a comma, format : https://www.flickr.com/photos/{USERID}/{PHOTOID}  |
+| AddContactsToFav | Add theses users photos link in the queue of DoContactsFav task, multiple separated with a comma, format : https://www.flickr.com/photos/{USERID}/ |
+| AddContactsToFollow | Add theses users photos link in the queue of DoContactsFollow task, multiple separated with a comma, format : https://www.flickr.com/photos/{USERID}/  |
+| AddContactsToUnFollow | Add theses users photos link in the queue of DoContactsUnfollow task, multiple separated with a comma, format : https://www.flickr.com/photos/{USERID}/  |
+
 
 - Taks :
 Task name is case insensitive
@@ -115,11 +117,11 @@ A lot of settings in order to randomize or limit the batch, in the Bot.Json
 | DetectRecentContactPhotos | Push photos for DoPhotosFav |
 | DoContactsUnfollow | Pop elements that DetectContactsUnfollowBack have send to this queue |
 | DoContactsFollow | Pop elements that others tasks have send to this queue |
-| DoContactsFav | Pop elements that others tasks have send to this queue |
-| DoPhotosFav | Pop elements that others tasks have send to this queue ||
+| DoContactsFav | Pop user photos elements that others tasks have send to this queue and Fav multiple pictures of this user (between BotFavPictsPerContactMin and BotFavPictsPerContactMax) |
+| DoPhotosFav | Pop photo elements that others tasks have send to this queue and fav the picture |
 | Save | Update the session file |
-| Wait | Pause the worker |
-| Loop | Restart from first task |
+| Wait | Pause the worker between BotWaitTaskMinWaitSec and BotWaitTaskMaxWaitSec seconds |
+| Loop | Restart from LoopStart task else first task |
 
 ## Notes
 - Selenium Chrome Driver must have the same version than your Chrome (change the lib version in the project if required)
