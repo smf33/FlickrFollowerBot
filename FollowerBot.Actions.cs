@@ -114,7 +114,7 @@ namespace FlickrFollowerBot
 				{
 					if (s.StartsWith(Config.UrlRoot, StringComparison.OrdinalIgnoreCase))
 					{
-						if (queue.Contains(s))
+						if (!queue.Contains(s))
 						{
 							added++;
 							queue.Enqueue(s);
