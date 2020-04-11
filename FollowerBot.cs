@@ -172,7 +172,7 @@ namespace FlickrFollowerBot
 			StringBuilder dump = new StringBuilder();
 			try
 			{
-				dump.AppendFormat("# Dump last page : {0} @ {1}\r\n", Selenium.Title, Selenium.Url);
+				dump.AppendFormat("# Try Dump last page : {0} @ {1}\r\n", Selenium.Title, Selenium.Url);
 				dump.Append(Selenium.CurrentPageSource); // this one may crash more probably
 			}
 			catch
@@ -187,6 +187,16 @@ namespace FlickrFollowerBot
 			else
 			{
 				Log.LogDebug("# Couldn't dump last page context");
+			}
+
+			try
+			{
+				Log.LogDebug("# Try saving Data in order to avoid queue polution");
+				SaveData();
+			}
+			catch
+			{
+				// Not usefull because already in exception
 			}
 		}
 
