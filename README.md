@@ -1,6 +1,8 @@
 # Flickr Follower Bot
 
-Bot for Flickr, in .Net Core, using a Chrome client and Selenium for command it.
+Bot for Flickr, in .Net Core, using a Chrome client and Selenium for command it  
+with an easy bot configuration (*by default in the FlickrFollowerBot.json*)  
+and an easy task monitoring (*readeable logs output and queues are stored in the PersistenceData_USERID.json file that the bot initialize*)
 
 Main functions :
 - Follow users whose follow you
@@ -23,7 +25,7 @@ Main functions :
 
 Download the sources and run donet sdk command in the folder of your Windows, Linux or Mac.
 
-- Run with default (users settings have been set in the .json or the environnement variable) :
+- Run with default (*after having added **BotUserEmail** and **BotUserPassword** in the FlickrFollowerBot.json*) :
 ```
 dotnet run
 ```
@@ -58,20 +60,26 @@ dotnet run BotTasks=DetectRecentContactPhotos,DoPhotosFav BotUserEmail=you@dom.c
 dotnet run BotSearchKeywords="Paris,France" BotTasks=SearchKeywords,DoContactsFollow,DoPhotosFav BotUserEmail=you@dom.com BotUserPassword=Passw0rd
 ```
 
-- Using a remote selenium hub :
+- Using a remote selenium hub and use windows environnement varaible this time:
 ```
-dotnet run SeleniumRemoteServer=http://seleniumhubhostname:4444/wd/hub BotUserEmail=you@dom.com BotUserPassword=Passw0rd
+SET SeleniumRemoteServer=http://seleniumhubhostname:4444/wd/hub
+SET BotUserEmail=you@dom.com
+SET BotUserPassword=Passw0rd
+dotnet run
 ```
 
 ### Docker run
 ![Docker](https://github.com/smf33/FlickrFollowerBot/workflows/Docker/badge.svg)
 
 - Build and Run default BotTasks with Docker with a remote Selenium Hub (here another docker) :
-Exemple with Z:\FlickrFollowerBot as the source path, on a Windows system
+Exemple with Z:\FlickrFollowerBot as the source path, on a Windows system using the environnement variable (SET)
 ```
+SET BotUserEmail=you@dom.com
+SET BotUserPassword=Passw0rd
+SET SeleniumRemoteServer=http://seleniumhost:4444/wd/hub
 docker build -f Z:\FlickrFollowerBot\Dockerfile -t flickrfollowerbot Z:\FlickrFollowerBot
 docker run --name seleniumContainer --detach --publish 4444:4444 selenium/standalone-chrome --volume /dev/shm:/dev/shm 
-docker run --link seleniumContainer:seleniumhost flickrfollowerbot BotUserEmail=you@dom.com BotUserPassword=Passw0rd SeleniumRemoteServer=http://seleniumhost:4444/wd/hub
+docker run --link seleniumContainer:seleniumhost flickrfollowerbot   
 ```
 
 ### Docker Compose run
@@ -85,43 +93,44 @@ docker-compose up
 ```
 
 ## Configuration
-- Main settings :
-Settings may be read in command line parameter, else in environnement variable, else in FlickrFollowerBot.json.
-Only BotUserEmail and BotUserPassword won't have default working values from the initial configuration file.
-BotUserPassword may be set to null in debug mode (the user will be able to insert the password himself)
+### Main settings
+Settings may be read in command line parameter, else in environnement variable (*SET on Windows, EXPORT on linux*), else directly put in the *FlickrFollowerBot.json*.  
+Only **BotUserEmail** and **BotUserPassword** won't have default working values from the initial configuration file.  
+**BotUserPassword** may be set to null in debug mode (*the user will be able to insert the password himself*)
 
 | Parameter | Description |
 | :-------- | :---------- |
-| BotUserEmail | Email for auto-login and filename of the session file |
-| BotUserPassword | Password for auto-login, may be set to null if session file already created |
-| BotUsePersistence | Will create a file for the user session and cookies |
-| SeleniumRemoteServer | Url of the Selenium Hub web service |
-| BotTasks | Tasks to do, separatedd by a comma |
-| BotUserSaveFolder | Where user informations (like cookie) are stored |
-| AddPhotosToFav | Add theses direct photos link in the queue of DoPhotosFav task, multiple separated with a comma, format : https://www.flickr.com/photos/{USERID}/{PHOTOID}  |
-| AddContactsToFav | Add theses users photos link in the queue of DoContactsFav task, multiple separated with a comma, format : https://www.flickr.com/photos/{USERID}/ |
-| AddContactsToFollow | Add theses users photos link in the queue of DoContactsFollow task, multiple separated with a comma, format : https://www.flickr.com/photos/{USERID}/  |
-| AddContactsToUnFollow | Add theses users photos link in the queue of DoContactsUnfollow task, multiple separated with a comma, format : https://www.flickr.com/photos/{USERID}/  |
+| **BotUserEmail** | Email for auto-login and filename of the session file |
+| **BotUserPassword** | Password for auto-login, may be set to null if session file already created |
+| **BotUsePersistence** | Will create a file for the user session information (*cookies, queue to do*) named *"PersistenceData_USERID.json"*  (*Yes by default*) |
+| **BotUserSaveFolder** | Where is stored user session file (*Current folder by default*), it this value is set, the file won't have the *PersistenceData_* prefix and will be just named *USERID.json*.
+| **SeleniumRemoteServer** | Url of the Selenium Hub web service (*Not used by default : Use local Chrome by default*) |
+| **BotTasks** | Tasks to do, separatedd by a comma |
+| **AddPhotosToFav** | Add theses direct photos link in the queue of DoPhotosFav task, multiple separated with a comma, format : https://www.flickr.com/photos/{USERID}/{PHOTOID}  |
+| **AddContactsToFav** | Add theses users photos link in the queue of DoContactsFav task, multiple separated with a comma, format : https://www.flickr.com/photos/{USERID}/ |
+| **AddContactsToFollow** | Add theses users photos link in the queue of DoContactsFollow task, multiple separated with a comma, format : https://www.flickr.com/photos/{USERID}/  |
+| **AddContactsToUnFollow** | Add theses users photos link in the queue of DoContactsUnfollow task, multiple separated with a comma, format : https://www.flickr.com/photos/{USERID}/  |
 
 
-- Taks :
-Task name is case insensitive
-A lot of settings in order to randomize or limit the batch, in the Bot.Json
+### Availeable Taks
+Task names are case insensitive.  
+A lot of settings, in order to randomize or limit the batch, are stored in the *FlickrFollowerBot.Json* with *"BotXXXXX"* settings.  
+All queues to do are stored in the user session file, so you can remove this user file if you want to clean the tasks queues.
 
 | Name | Description |
 | :--- | :---------- |
-| DetectContactsFollowBack | Push contacts for DoContactsFollow and DoContactsFav |
-| DetectContactsUnfollowBack | Push contacts for DoContactsUnfollow |
-| DetectExplored | Push contacts for DoContactsFollow, DoContactsFav and push photos to DoPhotosFav |
-| SearchKeywords | Search BotSearchKeywords and find contacts for DoContactsFollow, DoContactsFav and push photos to DoPhotosFav |
-| DetectRecentContactPhotos | Push photos for DoPhotosFav |
-| DoContactsUnfollow | Pop elements that DetectContactsUnfollowBack have send to this queue |
-| DoContactsFollow | Pop elements that others tasks have send to this queue |
-| DoContactsFav | Pop user photos elements that others tasks have send to this queue and Fav multiple pictures of this user (between BotFavPictsPerContactMin and BotFavPictsPerContactMax) |
-| DoPhotosFav | Pop photo elements that others tasks have send to this queue and fav the picture |
-| Save | Update the session file |
-| Wait | Pause the worker between BotWaitTaskMinWaitSec and BotWaitTaskMaxWaitSec seconds |
-| Loop | Restart from LoopStart task else first task |
+| **DetectContactsFollowBack** | Push contacts for **DoContactsFollow** and **DoContactsFav** tasks queue |
+| **DetectContactsUnfollowBack** | Push contacts for **DoContactsUnfollow** task queue |
+| **DetectExplored** | Push contacts for **DoContactsFollow** and **DoContactsFav** tasks queue and push photos to **DoPhotosFav** task queue |
+| **SearchKeywords** | Search BotSearchKeywords and find contacts for DoContactsFollow, DoContactsFav and push photos to **DoPhotosFav** task queue |
+| **DetectRecentContactPhotos** | Push photos for **DoPhotosFav** task queue |
+| **DoContactsUnfollow** | Pop elements that **DetectContactsUnfollowBack** have send to this queue |
+| **DoContactsFollow** | Pop elements that others tasks have send to this queue |
+| **DoContactsFav** | Pop user photos elements that others tasks have send to this queue and Fav multiple pictures of this user (between **BotFavPictsPerContactMin** and **BotFavPictsPerContactMax**) |
+| **DoPhotosFav** | Pop photo elements that others tasks have send to this queue and fav the picture |
+| **Save | Update the user session file (*USERID.json* file, stored in the **BotUserSaveFolder**) |
+| **Wait** | Pause the worker between **BotWaitTaskMinWaitSec** and **BotWaitTaskMaxWaitSec** seconds |
+| **Loop** | Restart from **LoopStart** task else first task |
 
 ## Notes
 - Selenium Chrome Driver must have the same version than your Chrome (change the lib version in the project if required)
@@ -137,4 +146,4 @@ A lot of settings in order to randomize or limit the batch, in the Bot.Json
 - Smarter fav : detect already faved pict without going to the pict
 - In some case, fix the Content Security Policy issue on some retail/headless mode first auth
 - Resume when Chrome crash ?
-- Fork for Instagram
+- Detect when Flick move the bot to the message interface
