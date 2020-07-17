@@ -30,6 +30,7 @@ namespace FlickrFollowerBot
 			internal int BotFavPictsPerContactMax;
 			internal int BotUnfollowTaskBatchMinLimit;
 			internal int BotUnfollowTaskBatchMaxLimit;
+			internal int BotUsePersistenceLimitHours;
 			internal int BotContactsFavTaskBatchMinLimit;
 			internal int BotPhotoFavTaskBatchMinLimit;
 			internal int BotFollowTaskBatchMinLimit;
@@ -168,6 +169,7 @@ namespace FlickrFollowerBot
 					Config.BotRecentContactPostScrools = int.Parse(config["BotRecentContactPostScrools"], CultureInfo.InvariantCulture);
 					Config.BotUnfollowTaskBatchMinLimit = int.Parse(config["BotUnfollowTaskBatchMinLimit"], CultureInfo.InvariantCulture);
 					Config.BotUnfollowTaskBatchMaxLimit = int.Parse(config["BotUnfollowTaskBatchMaxLimit"], CultureInfo.InvariantCulture);
+					Config.BotUsePersistenceLimitHours = int.Parse(config["BotUsePersistenceLimitHours"], CultureInfo.InvariantCulture);
 					Config.BotKeepSomeUnfollowerContacts = int.Parse(config["BotKeepSomeUnfollowerContacts"], CultureInfo.InvariantCulture);
 					Config.SeleniumWindowMaxH = int.Parse(config["SeleniumWindowMaxH"], CultureInfo.InvariantCulture);
 					Config.SeleniumWindowMaxW = int.Parse(config["SeleniumWindowMaxW"], CultureInfo.InvariantCulture);

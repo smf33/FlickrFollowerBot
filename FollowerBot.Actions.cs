@@ -187,6 +187,8 @@ namespace FlickrFollowerBot
 				{
 					Data.UserContactUrl = Data.UserContactUrl.Remove(Data.UserContactUrl.Length - 1);
 				}
+
+				Data.CookiesInitDate = DateTime.UtcNow;
 			}
 			else
 			{

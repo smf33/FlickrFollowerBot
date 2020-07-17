@@ -28,6 +28,7 @@
 	"BotTasks": "DetectContactsFollowBack,DetectContactsUnfollowBack,DetectExplored,Save,DoContactsFollow,DoContactsFav,DoContactsUnfollow,Wait,Loop",
 	"BotUnfollowTaskBatchMaxLimit": 80,
 	"BotUnfollowTaskBatchMinLimit": 20,
+	"BotUsePersistenceLimitHours": -1,
 	"BotUsePersistence": 1,
 	"BotUserEmail": null,
 	"BotUserPassword": null,

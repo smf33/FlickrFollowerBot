@@ -35,6 +35,10 @@ namespace FlickrFollowerBot
 			/// </summary>
 			public Queue<string> ContactsToUnfollow = new Queue<string>();
 
+			/// <summary>
+			/// Logon Cookies date
+			/// </summary>   
+			public Nullable<DateTime> CookiesInitDate = null;
 			public IEnumerable<object> Cookies = new List<object>();
 			public IDictionary<string, string> SessionStorage = new Dictionary<string, string>();
 			public IDictionary<string, string> LocalStorage = new Dictionary<string, string>();
@@ -99,59 +103,68 @@ namespace FlickrFollowerBot
 				string fn = JsonPath + Config.BotUserEmail + ".json";
 				if (File.Exists(fn))
 				{
-					Log.LogDebug("LOADING USER JSON");
 					PersistenceData tmp = JsonConvert.DeserializeObject<PersistenceData>(File.ReadAllText(fn, Encoding.UTF8));
-					Data.UserContactUrl = tmp.UserContactUrl;
-					if (Config.BotCacheMyContacts)
+					Data.CookiesInitDate = tmp.CookiesInitDate ?? tmp.MyContactsUpdate ?? DateTime.UtcNow; // manage cache from previous version
+
+					if (Config.BotUsePersistenceLimitHours > 0 && DateTime.UtcNow < tmp.CookiesInitDate.Value.AddHours(Config.BotUsePersistenceLimitHours))
 					{
-						Data.MyContactsUpdate = tmp.MyContactsUpdate;
-						if (tmp.MyContacts != null)
+						Log.LogDebug("LOADING USER JSON");
+						Data.UserContactUrl = tmp.UserContactUrl;
+						if (Config.BotCacheMyContacts)
 						{
-							Data.MyContacts = tmp.MyContacts;
-							Log.LogDebug("$MyContacts #{0}", Data.MyContacts.Count);
+							Data.MyContactsUpdate = tmp.MyContactsUpdate;
+							if (tmp.MyContacts != null)
+							{
+								Data.MyContacts = tmp.MyContacts;
+								Log.LogDebug("$MyContacts #{0}", Data.MyContacts.Count);
+							}
+							if (tmp.MyContactsBanned != null)
+							{
+								Data.MyContactsBanned = tmp.MyContactsBanned;
+								Log.LogDebug("$MyContactsBanned #{0}", Data.MyContactsBanned.Count);
+							}
 						}
-						if (tmp.MyContactsBanned != null)
+						if (tmp.ContactsToFollow != null)
 						{
-							Data.MyContactsBanned = tmp.MyContactsBanned;
-							Log.LogDebug("$MyContactsBanned #{0}", Data.MyContactsBanned.Count);
+							Data.ContactsToFollow = new Queue<string>(tmp.ContactsToFollow
+								.Except(Data.MyContacts).Except(Data.MyContactsBanned)); // some contacts may have been already added manualy
+							Log.LogDebug("$ContactsToFollow #{0}", Data.ContactsToFollow.Count);
+						}
+						if (tmp.ContactsToFav != null)
+						{
+							Data.ContactsToFav = new Queue<string>(tmp.ContactsToFav
+								.Except(Data.MyContacts).Except(Data.MyContactsBanned)); // some contacts may have been already added manualy
+							Log.LogDebug("$ContactsToFav #{0}", Data.ContactsToFav.Count);
+						}
+						if (tmp.ContactsToUnfollow != null)
+						{
+							Data.ContactsToUnfollow = tmp.ContactsToUnfollow;
+							Log.LogDebug("$ContactsToUnfollow #{0}", Data.ContactsToUnfollow.Count);
+						}
+						if (tmp.PhotosToFav != null)
+						{
+							Data.PhotosToFav = tmp.PhotosToFav;
+							Log.LogDebug("$PhotosToFav #{0}", Data.PhotosToFav.Count);
+						}
+						if (tmp.Cookies != null)
+						{
+							Data.Cookies = tmp.Cookies;
+							Log.LogDebug("Cookies : {0}", Data.Cookies.Count());
+						}
+						if (tmp.SessionStorage != null)
+						{
+							Data.SessionStorage = tmp.SessionStorage;
+							Log.LogDebug("SessionStorage : {0}", Data.SessionStorage.Count);
+						}
+						if (tmp.LocalStorage != null)
+						{
+							Data.LocalStorage = tmp.LocalStorage;
+							Log.LogDebug("LocalStorage : {0}", Data.LocalStorage.Count);
 						}
 					}
-					if (tmp.ContactsToFollow != null)
+					else
 					{
-						Data.ContactsToFollow = new Queue<string>(tmp.ContactsToFollow
-							.Except(Data.MyContacts).Except(Data.MyContactsBanned)); // some contacts may have been already added manualy
-						Log.LogDebug("$ContactsToFollow #{0}", Data.ContactsToFollow.Count);
-					}
-					if (tmp.ContactsToFav != null)
-					{
-						Data.ContactsToFav = new Queue<string>(tmp.ContactsToFav
-							.Except(Data.MyContacts).Except(Data.MyContactsBanned)); // some contacts may have been already added manualy
-						Log.LogDebug("$ContactsToFav #{0}", Data.ContactsToFav.Count);
-					}
-					if (tmp.ContactsToUnfollow != null)
-					{
-						Data.ContactsToUnfollow = tmp.ContactsToUnfollow;
-						Log.LogDebug("$ContactsToUnfollow #{0}", Data.ContactsToUnfollow.Count);
-					}
-					if (tmp.PhotosToFav != null)
-					{
-						Data.PhotosToFav = tmp.PhotosToFav;
-						Log.LogDebug("$PhotosToFav #{0}", Data.PhotosToFav.Count);
-					}
-					if (tmp.Cookies != null)
-					{
-						Data.Cookies = tmp.Cookies;
-						Log.LogDebug("Cookies : {0}", Data.Cookies.Count());
-					}
-					if (tmp.SessionStorage != null)
-					{
-						Data.SessionStorage = tmp.SessionStorage;
-						Log.LogDebug("SessionStorage : {0}", Data.SessionStorage.Count);
-					}
-					if (tmp.LocalStorage != null)
-					{
-						Data.LocalStorage = tmp.LocalStorage;
-						Log.LogDebug("LocalStorage : {0}", Data.LocalStorage.Count);
+						Log.LogWarning("Persistence limit reached, starting a new session");
 					}
 				}
 				else
@@ -173,6 +186,7 @@ namespace FlickrFollowerBot
 					ContactsToFav = Data.ContactsToFav,
 					ContactsToUnfollow = Data.ContactsToUnfollow,
 					PhotosToFav = Data.PhotosToFav,
+					CookiesInitDate = Data.CookiesInitDate,
 					Cookies = Selenium.Cookies,
 					SessionStorage = Selenium.SessionStorage,
 					LocalStorage = Selenium.LocalStorage
