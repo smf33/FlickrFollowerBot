@@ -106,7 +106,7 @@ namespace FlickrFollowerBot
 					PersistenceData tmp = JsonConvert.DeserializeObject<PersistenceData>(File.ReadAllText(fn, Encoding.UTF8));
 					Data.CookiesInitDate = tmp.CookiesInitDate ?? tmp.MyContactsUpdate ?? DateTime.UtcNow; // manage cache from previous version
 
-					if (Config.BotUsePersistenceLimitHours > 0 && DateTime.UtcNow < tmp.CookiesInitDate.Value.AddHours(Config.BotUsePersistenceLimitHours))
+					if (Config.BotUsePersistenceLimitHours > 0 && DateTime.UtcNow < Data.CookiesInitDate.Value.AddHours(Config.BotUsePersistenceLimitHours))
 					{
 						Log.LogDebug("LOADING USER JSON");
 						Data.UserContactUrl = tmp.UserContactUrl;
