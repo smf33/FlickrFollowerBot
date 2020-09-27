@@ -47,7 +47,7 @@
 	"CssLoginWarning": "a[role=\"button\"].dismiss",
 	"CssModalWaiterBalls": "div.fluid-modal-overlay>div.balls",
 	"CssPhotoFave": ".fave-view",
-	"CssPhotoFaved": "span.fave-star.is-faved",
+	"CssPhotoFaved": ".fave-star.is-faved",
 	"CssPhotos": ".photo-list-photo-interaction>a.overlay",
 	"CssPhotosError404": ".message.is-http-404",
 	"CssPhotosFaved": "span.engagement-item.fave.faved",
