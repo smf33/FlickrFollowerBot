@@ -16,6 +16,7 @@ namespace FlickrFollowerBot
             }
             Console.ResetColor();
         }
+
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
             switch (logLevel)
@@ -24,12 +25,15 @@ namespace FlickrFollowerBot
                 case LogLevel.Error:
                     Log(ConsoleColor.Red, formatter(state, exception), ConsoleColor.DarkRed, exception);
                     break;
+
                 case LogLevel.Warning:
                     Log(ConsoleColor.Yellow, formatter(state, exception), ConsoleColor.DarkYellow, exception);
                     break;
+
                 case LogLevel.Information:
                     Log(ConsoleColor.White, formatter(state, exception), 0, exception);
                     break;
+
                 default:
                     Log(ConsoleColor.DarkGray, formatter(state, exception), 0, exception);
                     break;
@@ -45,6 +49,5 @@ namespace FlickrFollowerBot
         {
             throw new NotImplementedException();
         }
-
     }
 }

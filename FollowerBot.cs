@@ -90,44 +90,58 @@ namespace FlickrFollowerBot
                     case DetectContactsFollowBackStr:
                         DetectContactsFollowBack();
                         break;
+
                     case DetectExploredStr:
                         DetectExplored();
                         break;
+
                     case DetectExploredContactsOnlyStr:
                         DetectExplored(true, false);
                         break;
+
                     case DetectExploredPhotosOnlyStr:
                         DetectExplored(false, true);
                         break;
+
                     case SearchKeywordsStr:
                         SearchKeywords();
                         break;
+
                     case SearchKeywordsContactsOnlyStr:
                         SearchKeywords(true, false);
                         break;
+
                     case SearchKeywordsPhotosOnlyStr:
                         SearchKeywords(false, true);
                         break;
+
                     case DoContactsFollowStr:
                         DoContactsFollow();
                         break;
+
                     case DoContactsFavStr:
                         DoContactsFav();
                         break;
+
                     case DoPhotosFavStr:
                         DoPhotosFav();
                         break;
+
                     case DetectContactsUnfollowBackStr:
                         DetectContactsUnfollowBack();
                         break;
+
                     case DoContactsUnfollowStr:
                         DoContactsUnfollow();
                         break;
+
                     case DetectRecentContactPhotosStr:
                         DetectRecentContactPhotos();
                         break;
+
                     case SaveStr: // managed in the if after
                         break;
+
                     case PauseStr:
                     case WaitStr:
                         Task.Delay(Rand.Next(Config.BotWaitTaskMinWaitSec, Config.BotWaitTaskMaxWaitSec))
@@ -151,6 +165,7 @@ namespace FlickrFollowerBot
                             curTask = SaveStr;
                         }
                         break;
+
                     default:
                         Log.LogError("Unknown BotTask : {0}", tasks[i]);
                         break;
@@ -201,6 +216,7 @@ namespace FlickrFollowerBot
         }
 
         #region IDisposable Support
+
         private bool disposedValue = false; // To detect redundant calls
         private SeleniumWrapper Selenium;
 
@@ -222,7 +238,7 @@ namespace FlickrFollowerBot
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        #endregion
 
+        #endregion IDisposable Support
     }
 }

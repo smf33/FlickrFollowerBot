@@ -11,7 +11,6 @@ namespace FlickrFollowerBot
 {
     internal class SeleniumWrapper : IDisposable
     {
-
         private readonly IJavaScriptExecutor JsDriver;
 
         private static ChromeOptions GetOptions(string w, string h, IEnumerable<string> seleniumBrowserArguments)
@@ -72,7 +71,6 @@ namespace FlickrFollowerBot
             }
         }
 
-
         public string Url
         {
             get => WebDriver.Url;
@@ -109,7 +107,6 @@ namespace FlickrFollowerBot
 
         public void ClickIfPresent(string cssSelector)
         {
-
             WebDriver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
             try
             {
@@ -201,6 +198,7 @@ namespace FlickrFollowerBot
         }
 
         #region IDisposable Support
+
         private bool disposedValue = false; // To detect redundant calls
         private IWebDriver WebDriver;
 
@@ -233,7 +231,7 @@ namespace FlickrFollowerBot
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        #endregion
 
+        #endregion IDisposable Support
     }
 }

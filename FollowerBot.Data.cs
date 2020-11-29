@@ -10,7 +10,6 @@ namespace FlickrFollowerBot
 {
     public partial class FollowerBot
     {
-
         private class PersistenceData
         {
             public string UserContactUrl = null;
@@ -22,7 +21,7 @@ namespace FlickrFollowerBot
 
             /// <summary>
             /// List of URL of the contact'photos
-            /// </summary>        
+            /// </summary>
             public Queue<string> ContactsToFollow = new Queue<string>();
 
             /// <summary>
@@ -37,27 +36,27 @@ namespace FlickrFollowerBot
 
             /// <summary>
             /// Logon Cookies date
-            /// </summary>   
+            /// </summary>
             public Nullable<DateTime> CookiesInitDate = null;
+
             public IEnumerable<object> Cookies = new List<object>();
             public IDictionary<string, string> SessionStorage = new Dictionary<string, string>();
             public IDictionary<string, string> LocalStorage = new Dictionary<string, string>();
 
             /// <summary>
             /// Last refresh date
-            /// </summary>   
+            /// </summary>
             public Nullable<DateTime> MyContactsUpdate = null;
 
             /// <summary>
             /// List of URL of the contact'photos
-            /// </summary>        
+            /// </summary>
             public HashSet<string> MyContacts = new HashSet<string>();
 
             /// <summary>
             /// List of URL of the contact'photos
-            /// </summary>        
+            /// </summary>
             public HashSet<string> MyContactsBanned = new HashSet<string>();
-
         }
 
         /// <summary>
@@ -200,6 +199,5 @@ namespace FlickrFollowerBot
                 File.WriteAllText(JsonPath + Config.BotUserEmail + ".json", JsonConvert.SerializeObject(tmp, Formatting.Indented), Encoding.UTF8);
             }
         }
-
     }
 }

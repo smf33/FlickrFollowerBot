@@ -5,7 +5,6 @@ namespace FlickrFollowerBot
 {
     public class Program
     {
-
         private static int Main(string[] args)
         {
             ConsoleLogger logger = new ConsoleLogger();
@@ -32,6 +31,5 @@ namespace FlickrFollowerBot
 
             return 0;
         }
-
     }
 }

@@ -9,7 +9,6 @@ namespace FlickrFollowerBot
 {
     public partial class FollowerBot
     {
-
         private class Configuration
         {
             internal string AddPhotosToFav;
@@ -205,6 +204,5 @@ namespace FlickrFollowerBot
                 throw new FormatException("Configuration file missing : " + configJsonPath);
             }
         }
-
     }
 }

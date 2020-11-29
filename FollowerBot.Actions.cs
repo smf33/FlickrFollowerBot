@@ -37,6 +37,7 @@ namespace FlickrFollowerBot
             Task.Delay(Config.BotStepMinWaitMs)
                 .Wait();
         }
+
         private void WaitHumanizer()
         {
             Task.Delay(Rand.Next(Config.BotStepMinWaitMs, Config.BotStepMaxWaitMs))
@@ -281,7 +282,6 @@ namespace FlickrFollowerBot
                 }
                 Log.LogDebug("$PhotosToFav +{0}", Data.PhotosToFav.Count - c);
             }
-
         }
 
         private void SearchKeywords(bool doContact = true, bool doPhoto = true)
@@ -332,7 +332,6 @@ namespace FlickrFollowerBot
                     }
                     Log.LogDebug("$PhotosToFav +{0}", Data.PhotosToFav.Count - c);
                 }
-
             }
         }
 
@@ -623,6 +622,5 @@ namespace FlickrFollowerBot
             }
             Log.LogDebug("$PhotosToFav -{0}", c - Data.PhotosToFav.Count);
         }
-
     }
 }
