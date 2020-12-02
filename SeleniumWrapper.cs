@@ -105,19 +105,21 @@ namespace FlickrFollowerBot
                 .Select(x => x.GetAttribute(attribute));
         }
 
-        public void ClickIfPresent(string cssSelector)
+        public bool ClickIfPresent(string cssSelector)
         {
             WebDriver.Manage().Timeouts().ImplicitWait = TimeSpan.Zero;
-            try
-            {
-                WebDriver.FindElement(By.CssSelector(cssSelector))
-                    .Click();
-            }
-            catch (NoSuchElementException)
-            {
-                // ignore
-            }
+            IEnumerable<IWebElement> found = WebDriver.FindElements(By.CssSelector(cssSelector));
             WebDriver.Manage().Timeouts().ImplicitWait = NormalWaiter;
+
+            if (found.Any())
+            {
+                found.First().Click();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void Click(string cssSelector)

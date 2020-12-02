@@ -39,8 +39,8 @@ namespace FlickrFollowerBot
             internal int BotRecentContactPostScrools;
             internal int BotStepMaxWaitMs;
             internal int BotStepMinWaitMs;
-            internal int BotWaitTaskMaxWaitSec;
-            internal int BotWaitTaskMinWaitSec;
+            internal int BotWaitTaskMaxWaitMs;
+            internal int BotWaitTaskMinWaitMs;
             internal int BotKeepSomeUnfollowerContacts;
             internal string BotTasks;
             internal string BotUserEmail;
@@ -154,8 +154,8 @@ namespace FlickrFollowerBot
                     Config.BotCacheTimeLimitHours = int.Parse(config["BotCacheTimeLimitHours"], CultureInfo.InvariantCulture);
                     Config.BotStepMinWaitMs = int.Parse(config["BotStepMinWaitMs"], CultureInfo.InvariantCulture);
                     Config.BotStepMaxWaitMs = int.Parse(config["BotStepMaxWaitMs"], CultureInfo.InvariantCulture);
-                    Config.BotWaitTaskMinWaitSec = int.Parse(config["BotWaitTaskMinWaitSec"], CultureInfo.InvariantCulture);
-                    Config.BotWaitTaskMaxWaitSec = int.Parse(config["BotWaitTaskMaxWaitSec"], CultureInfo.InvariantCulture);
+                    Config.BotWaitTaskMinWaitMs = int.Parse(config["BotWaitTaskMinWaitMs"], CultureInfo.InvariantCulture);
+                    Config.BotWaitTaskMaxWaitMs = int.Parse(config["BotWaitTaskMaxWaitMs"], CultureInfo.InvariantCulture);
                     Config.BotFavPictsPerContactMin = int.Parse(config["BotFavPictsPerContactMin"], CultureInfo.InvariantCulture);
                     Config.BotFavPictsPerContactMax = int.Parse(config["BotFavPictsPerContactMax"], CultureInfo.InvariantCulture);
                     Config.BotExploreScrools = int.Parse(config["BotExploreScrools"], CultureInfo.InvariantCulture);

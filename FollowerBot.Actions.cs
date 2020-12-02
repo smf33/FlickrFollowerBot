@@ -136,7 +136,10 @@ namespace FlickrFollowerBot
 
         private void PostAuthInit()
         {
-            Selenium.ClickIfPresent(Config.CssLoginWarning);
+            if (Selenium.ClickIfPresent(Config.CssLoginWarning))
+            {
+                WaitHumanizer();
+            }
 
             if (!Data.MyContactsUpdate.HasValue
                 || DateTime.UtcNow > Data.MyContactsUpdate.Value.AddHours(Config.BotCacheTimeLimitHours))

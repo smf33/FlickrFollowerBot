@@ -129,7 +129,7 @@ All queues to do are stored in the user session file, so you can remove this use
 | **DoContactsFav** | Pop user photos elements that others tasks have send to this queue and Fav multiple pictures of this user (between **BotFavPictsPerContactMin** and **BotFavPictsPerContactMax**) |
 | **DoPhotosFav** | Pop photo elements that others tasks have send to this queue and fav the picture |
 | **Save | Update the user session file (*USERID.json* file, stored in the **BotUserSaveFolder**) |
-| **Wait** | Pause the worker between **BotWaitTaskMinWaitSec** and **BotWaitTaskMaxWaitSec** seconds |
+| **Wait** | Pause the worker between **BotWaitTaskMinWaitMs** and **BotWaitTaskMaxWaitMs** milliseconds |
 | **Loop** | Restart from **LoopStart** task else first task |
 
 ## Notes
