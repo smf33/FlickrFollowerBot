@@ -142,6 +142,7 @@ namespace FlickrFollowerBot
             }
 
             if (!Data.MyContactsUpdate.HasValue
+                || Config.BotCacheTimeLimitHours <= 0
                 || DateTime.UtcNow > Data.MyContactsUpdate.Value.AddHours(Config.BotCacheTimeLimitHours))
             {
                 Data.MyContacts = GetContactList(Config.UrlContacts).ToHashSet();
