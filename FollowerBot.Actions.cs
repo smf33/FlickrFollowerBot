@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Extensions.Logging;
 
@@ -10,87 +9,6 @@ namespace FlickrFollowerBot
 {
     public partial class FollowerBot
     {
-        private static readonly Random Rand = new Random();
-
-        private void WaitingBalls()
-        {
-            do
-            {
-                Log.LogDebug("WaitingBalls...");
-                WaitMin();
-            }
-            while (Selenium.GetElements(Config.CssWaiterBalls, true, true).Any());
-        }
-
-        private void SchroolDownLoop(int loop)
-        {
-            for (int i = 0; i < loop; i++)
-            {
-                Selenium.ScrollToBottom();
-                WaitHumanizer();
-                WaitingBalls();
-            }
-        }
-
-        private void WaitMin()
-        {
-            Task.Delay(Config.BotStepMinWaitMs)
-                .Wait();
-        }
-
-        private void WaitHumanizer()
-        {
-            Task.Delay(Rand.Next(Config.BotStepMinWaitMs, Config.BotStepMaxWaitMs))
-                    .Wait();
-        }
-
-        private void WaitUrlStartsWith(string url)
-        {
-            while (!Selenium.Url.StartsWith(url, StringComparison.OrdinalIgnoreCase))
-            {
-                Log.LogDebug("WaitUrlStartsWith...");
-                WaitMin();
-            }
-        }
-
-        private bool MoveTo(string partialOrNotUrl, bool forceReload = false)
-        {
-            Log.LogDebug("GET {0}", partialOrNotUrl);
-            string target;
-            if (partialOrNotUrl.StartsWith(Config.UrlRoot, StringComparison.OrdinalIgnoreCase))
-            {
-                target = partialOrNotUrl;
-            }
-            else
-            {
-                target = Config.UrlRoot + partialOrNotUrl;
-            }
-            if (!target.Equals(Selenium.Url, StringComparison.OrdinalIgnoreCase) || forceReload)
-            {
-                Selenium.Url = target;
-                WaitHumanizer();
-
-                // try again once on error 500
-                if (!Selenium.GetElements(Config.CssError500, true, true).Any())
-                {
-                    return true;
-                }
-                else
-                {
-                    WaitMin();
-                    Selenium.Url = target;
-                    WaitMin();
-
-                    WaitHumanizer();
-                    return !Selenium.GetElements(Config.CssError500, true, true).Any();
-                }
-            }
-            else
-            {
-                return true; // no redirection si OK.
-            }
-        }
-
         private IEnumerable<string> GetContactList(string subUrl)
         {
             MoveTo(Data.UserContactUrl + subUrl);
@@ -136,10 +54,7 @@ namespace FlickrFollowerBot
 
         private void PostAuthInit()
         {
-            if (Selenium.ClickIfPresent(Config.CssLoginWarning))
-            {
-                WaitHumanizer();
-            }
+            ClickWaitIfPresent(Config.CssLoginWarning);
 
             if (!Data.MyContactsUpdate.HasValue
                 || Config.BotCacheTimeLimitHours <= 0
@@ -364,7 +279,7 @@ namespace FlickrFollowerBot
 
         private void DoContactsFollow()
         {
-            int todo = Rand.Next(Config.BotFollowTaskBatchMinLimit, Config.BotFollowTaskBatchMaxLimit);
+            int todo = PseudoRand.Next(Config.BotFollowTaskBatchMinLimit, Config.BotFollowTaskBatchMaxLimit);
             int c = Data.ContactsToFollow.Count;
             while (Data.ContactsToFollow.TryDequeue(out string uri) && todo > 0)
             {
@@ -470,7 +385,7 @@ namespace FlickrFollowerBot
         {
             if (Config.BotFavPictsPerContactMin > 0)
             {
-                int contactsTodo = Rand.Next(Config.BotContactsFavTaskBatchMinLimit, Config.BotContactsFavTaskBatchMaxLimit);
+                int contactsTodo = PseudoRand.Next(Config.BotContactsFavTaskBatchMinLimit, Config.BotContactsFavTaskBatchMaxLimit);
                 int c = Data.ContactsToFav.Count;
                 while (Data.ContactsToFav.TryDequeue(out string uri) && 0 < contactsTodo)
                 {
@@ -483,7 +398,7 @@ namespace FlickrFollowerBot
                     {
                         Selenium.ScrollToBottom(); // else will only find 1st picts
 
-                        int favsTodo = Rand.Next(Config.BotFavPictsPerContactMin, Config.BotFavPictsPerContactMax);
+                        int favsTodo = PseudoRand.Next(Config.BotFavPictsPerContactMin, Config.BotFavPictsPerContactMax);
                         favsTodo -= Selenium.GetElements(Config.CssPhotosFaved, false, true).Count(); // mainly no picture already faved :-) don t wait uselessl
                         if (0 < favsTodo)
                         {
@@ -552,7 +467,7 @@ namespace FlickrFollowerBot
 
         private void DoContactsUnfollow()
         {
-            int todo = Rand.Next(Config.BotUnfollowTaskBatchMinLimit, Config.BotUnfollowTaskBatchMaxLimit);
+            int todo = PseudoRand.Next(Config.BotUnfollowTaskBatchMinLimit, Config.BotUnfollowTaskBatchMaxLimit);
             int c = Data.ContactsToUnfollow.Count;
             while (Data.ContactsToUnfollow.TryDequeue(out string uri) && todo > 0)
             {
@@ -602,7 +517,7 @@ namespace FlickrFollowerBot
 
         private void DoPhotosFav()
         {
-            int todo = Rand.Next(Config.BotPhotoFavTaskBatchMinLimit, Config.BotPhotoFavTaskBatchMaxLimit);
+            int todo = PseudoRand.Next(Config.BotPhotoFavTaskBatchMinLimit, Config.BotPhotoFavTaskBatchMaxLimit);
             int c = Data.PhotosToFav.Count;
             while (Data.PhotosToFav.TryDequeue(out string uri) && todo > 0)
             {

@@ -70,7 +70,7 @@ namespace FlickrFollowerBot
             internal int SeleniumWindowMinH;
             internal int SeleniumWindowMinW;
             internal IEnumerable<string> SeleniumBrowserArguments;
-            internal int BotLoopTaskLimited;
+            internal int BotLoopTaskLimit;
             internal int SeleniumRemoteServerWarmUpWaitMs;
             internal string UrlContacts;
             internal string UrlContactsBlocked;
@@ -176,13 +176,13 @@ namespace FlickrFollowerBot
                     Config.SeleniumWindowMinW = int.Parse(config["SeleniumWindowMinW"], CultureInfo.InvariantCulture);
                     Config.SeleniumRemoteServerWarmUpWaitMs = int.Parse(config["SeleniumRemoteServerWarmUpWaitMs"], CultureInfo.InvariantCulture);
 
-                    if (int.TryParse(config["BotLoopTaskLimited"], out int tmpBotLoopTaskLimited))
+                    if (int.TryParse(config["BotLoopTaskLimit"], out int tmpBotLoopTaskLimit))
                     {
-                        Config.BotLoopTaskLimited = tmpBotLoopTaskLimited;
+                        Config.BotLoopTaskLimit = tmpBotLoopTaskLimit;
                     }
                     else
                     {
-                        Config.BotLoopTaskLimited = 0;
+                        Config.BotLoopTaskLimit = 0;
                     }
 
                     if (!string.IsNullOrWhiteSpace(config["SeleniumBrowserArguments"]))

@@ -13,7 +13,7 @@
   "BotFollowTaskBatchMaxLimit": 80,
   "BotFollowTaskBatchMinLimit": 20,
   "BotKeepSomeUnfollowerContacts": 100,
-  "BotLoopTaskLimited": 0,
+  "BotLoopTaskLimit": 5,
   "BotPhotoFavTaskBatchMaxLimit": 80,
   "BotPhotoFavTaskBatchMinLimit": 20,
   "BotRecentContactPostScrools": 12,

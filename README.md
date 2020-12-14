@@ -130,7 +130,7 @@ All queues to do are stored in the user session file, so you can remove this use
 | **DoPhotosFav** | Pop photo elements that others tasks have send to this queue and fav the picture |
 | **Save | Update the user session file (*USERID.json* file, stored in the **BotUserSaveFolder**) |
 | **Wait** | Pause the worker between **BotWaitTaskMinWaitMs** and **BotWaitTaskMaxWaitMs** milliseconds |
-| **Loop** | Restart from **LoopStart** task else first task |
+| **Loop** | Restart from **BeginLoop** task else first task |
 
 ## Notes
 - Selenium Chrome Driver must have the same version than your Chrome (change the lib version in the project if required)

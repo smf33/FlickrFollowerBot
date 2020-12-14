@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json.Linq;
@@ -226,6 +227,20 @@ namespace FlickrFollowerBot
                 }
                 disposedValue = true;
             }
+        }
+
+        internal void DumpCurrentPage(string basePath, string userName)
+        {
+            string dt = DateTime.Now.ToString("yyyyMMdd-HHmmss");
+
+            // save HTML
+            string html = JsDriver.ExecuteScript("return document.documentElement.innerHTML").ToString()
+                .Replace("href=\"/", "href=\"https://www.flickr.com/");
+            File.WriteAllText(Path.Combine(basePath, string.Concat(userName, '.', dt, ".html")), html);
+
+            // sage image
+            Screenshot ss = ((ITakesScreenshot)WebDriver).GetScreenshot();
+            ss.SaveAsFile(Path.Combine(basePath, string.Concat(userName, '.', dt, ".png")));
         }
 
         public void Dispose()

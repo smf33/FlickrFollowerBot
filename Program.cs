@@ -10,17 +10,15 @@ namespace FlickrFollowerBot
             ConsoleLogger logger = new ConsoleLogger();
             try
             {
-                using (FollowerBot bot = new FollowerBot(args, logger))
+                using FollowerBot bot = new FollowerBot(args, logger);
+                try
                 {
-                    try
-                    {
-                        bot.Run();
-                    }
-                    catch
-                    {
-                        bot.DebugDump();
-                        throw;
-                    }
+                    bot.Run();
+                }
+                catch
+                {
+                    bot.DebugDump();
+                    throw;
                 }
             }
             catch (Exception ex)
@@ -30,6 +28,11 @@ namespace FlickrFollowerBot
             }
 
             return 0;
+        }
+
+        // Utility classes should not have public constructors
+        protected Program()
+        {
         }
     }
 }

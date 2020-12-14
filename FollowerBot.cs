@@ -20,8 +20,6 @@ namespace FlickrFollowerBot
         private const string DoContactsFollowStr = "DOCONTACTSFOLLOW";
         private const string DoContactsUnfollowStr = "DOCONTACTSUNFOLLOW";
         private const string DoPhotosFavStr = "DOPHOTOSFAV";
-        private const string LoopStartStr = "LOOPSTART";
-        private const string LoopStr = "LOOP";
         private const string PauseStr = "PAUSE";
         private const string SaveStr = "SAVE";
         private const string SearchKeywordsContactsOnlyStr = "SEARCHKEYWORDS_CONTACTSONLY";
@@ -42,8 +40,8 @@ namespace FlickrFollowerBot
 
             LoadData();
 
-            string w = Rand.Next(Config.SeleniumWindowMinW, Config.SeleniumWindowMaxW).ToString(CultureInfo.InvariantCulture);
-            string h = Rand.Next(Config.SeleniumWindowMinH, Config.SeleniumWindowMaxH).ToString(CultureInfo.InvariantCulture);
+            string w = PseudoRand.Next(Config.SeleniumWindowMinW, Config.SeleniumWindowMaxW).ToString(CultureInfo.InvariantCulture);
+            string h = PseudoRand.Next(Config.SeleniumWindowMinH, Config.SeleniumWindowMaxH).ToString(CultureInfo.InvariantCulture);
             if (string.IsNullOrWhiteSpace(Config.SeleniumRemoteServer))
             {
                 Log.LogDebug("NewChromeSeleniumWrapper({0}, {1}, {2})", ExecPath, w, h);
@@ -75,15 +73,9 @@ namespace FlickrFollowerBot
             SaveData(); // save cookies at last
 
             Log.LogInformation("## RUNNING...");
-            string[] tasks = Config.BotTasks.Split(',', StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < tasks.Length; i++)
+
+            foreach (string curTask in GetTasks(Config.BotTasks, Config.BotSaveAfterEachAction, Config.BotSaveOnEnd, Config.BotSaveOnLoop, Config.BotLoopTaskLimit))
             {
-                tasks[i] = tasks[i].Trim().ToUpperInvariant(); // standardize
-            }
-            int iLoop = Config.BotLoopTaskLimited;
-            for (int i = 0; i < tasks.Length; i++)
-            {
-                string curTask = tasks[i];
                 Log.LogInformation("# {0}...", curTask);
                 switch (curTask)
                 {
@@ -144,40 +136,14 @@ namespace FlickrFollowerBot
 
                     case PauseStr:
                     case WaitStr:
-                        Task.Delay(Rand.Next(Config.BotWaitTaskMinWaitMs, Config.BotWaitTaskMaxWaitMs))
+                        Task.Delay(PseudoRand.Next(Config.BotWaitTaskMinWaitMs, Config.BotWaitTaskMaxWaitMs))
                             .Wait();
                         continue; // no save anyway
-                    case LoopStartStr:
-                        continue; // no save anyway
-                    case LoopStr:
-                        if (Config.BotLoopTaskLimited <= 0)
-                        {
-                            i = Array.IndexOf(tasks, LoopStartStr); // -1 (so ok) if not found
-                        }
-                        else if (iLoop > 0)
-                        {
-                            Log.LogDebug("Loop still todo : {0}", iLoop);
-                            iLoop--;
-                            i = Array.IndexOf(tasks, LoopStartStr); // -1 (so ok) if not found
-                        }
-                        if (Config.BotSaveOnLoop)
-                        {
-                            curTask = SaveStr;
-                        }
-                        break;
 
                     default:
-                        Log.LogError("Unknown BotTask : {0}", tasks[i]);
+                        Log.LogError("Unknown BotTask : {0}", curTask);
                         break;
                 }
-                if (Config.BotSaveAfterEachAction || curTask == SaveStr)
-                {
-                    SaveData();
-                }
-            }
-            if (Config.BotSaveOnEnd)
-            {
-                SaveData();
             }
             Log.LogInformation("## ENDED OK");
         }
@@ -194,51 +160,18 @@ namespace FlickrFollowerBot
             {
                 // Not usefull because already in exception
             }
-
-            if (dump.Length > 0)
+            finally
             {
-                Log.LogDebug(dump.ToString());
-            }
-            else
-            {
-                Log.LogDebug("# Couldn't dump last page context");
-            }
-
-            try
-            {
-                Log.LogDebug("# Try saving Data in order to avoid queue polution");
-                SaveData();
-            }
-            catch
-            {
-                // Not usefull because already in exception
-            }
-        }
-
-        #region IDisposable Support
-
-        private bool disposedValue = false; // To detect redundant calls
-        private SeleniumWrapper Selenium;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
+                try
                 {
-                    Selenium.Dispose();
-                    Selenium = null;
+                    Log.LogDebug("# Try to dumping last page : {0} @ {1}\r\n", Selenium.Title, Selenium.Url);
+                    Selenium.DumpCurrentPage(Config.BotUserSaveFolder ?? ExecPath, Config.BotUserEmail);
                 }
-                disposedValue = true;
+                catch
+                {
+                    // Not usefull because already in exception context
+                }
             }
         }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion IDisposable Support
     }
 }
