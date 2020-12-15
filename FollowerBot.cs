@@ -131,14 +131,15 @@ namespace FlickrFollowerBot
                         DetectRecentContactPhotos();
                         break;
 
-                    case SaveStr: // managed in the if after
+                    case SaveStr:
+                        SaveData();
                         break;
 
                     case PauseStr:
                     case WaitStr:
                         Task.Delay(PseudoRand.Next(Config.BotWaitTaskMinWaitMs, Config.BotWaitTaskMaxWaitMs))
                             .Wait();
-                        continue; // no save anyway
+                        break;
 
                     default:
                         Log.LogError("Unknown BotTask : {0}", curTask);
